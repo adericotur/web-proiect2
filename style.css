@@ -1,0 +1,11 @@
+.persoana {
+    padding: 10px;
+    border: 2px solid gray;
+    border-radius: 10px 10px 2px 2px;
+    width: 200px;
+    text-align: center;
+}
+
+.persoana button{
+    float: right;
+}
