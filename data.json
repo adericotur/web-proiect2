@@ -1,41 +1,20 @@
 {
-  "persoane": [
-    {
-      "id": 2,
-      "nume": "Cordescu",
-      "prenume": "Octavian"
-    },
-    {
-      "nume": "dfg",
-      "prenume": "gg",
-      "id": 4
-    }
-  ],
-  "catei": [
+  "produse": [
     {
       "id": 1,
-      "name": "AFFENPINSCHER",
-      "img": "https://dog.ceo/api/img/affenpinscher/n02110627_11584.jpg"
+      "nume": "Cartofi cacanii",
+      "cantitate": "1.5",
+      "um": "kg",
+      "pret_unitar": "15",
+      "image": "http://assets.sport.ro/assets/foodstory/2013/11/01/image_galleries/3283/8-feluri-in-care-poti-gati-cartofii_size1.jpg"
     },
     {
-      "id": 2,
-      "name": "AKITA",
-      "img": "https://dog.ceo/api/img/akita/Akita_Inu_dog.jpg"
-    },
-    {
-      "id": 3,
-      "name": "CHIHUAHUA",
-      "img": "https://dog.ceo/api/img/chihuahua/n02085620_8578.jpg"
-    },
-    {
-      "id": 4,
-      "name": "LHASA",
-      "img": "https://dog.ceo//api//img//lhasa//n02098413_3033.jpg"
-    },
-    {
-      "id": 5,
-      "name": "MINIATURE SCHNAUZER",
-      "img": "https://dog.ceo//api//img//schnauzer//n02097209_920.jpg"
+      "nume": "Vinisor rosiatic",
+      "cantitate": "2",
+      "um": "buc",
+      "pret_unitar": "75",
+      "image": "http://internetretailing.net/files/2011/06/vin.jpg",
+      "id": 2
     }
   ]
 }

@@ -1,33 +1,33 @@
-var persoane = [];
+var produse = [];
 
 var nume_span;
 var prenume_span;
 
 var services = {
-    persoane: null,
-    catei: null
+    produse: null
 };
 
 window.onload = function () {
     nume_span = document.getElementById('nume');
     prenume_span = document.getElementById('prenume');
 
-    document.getElementById('buton-get').addEventListener("click", get_data);
+    // document.getElementById('buton-get').addEventListener("click", get_data);
     document.getElementById('buton-post').addEventListener("click", post_data);
-    document.getElementById('buton-put').addEventListener("click", put_data);
-    // document.getElementById('buton-delete').addEventListener("click", delete_data);
 
 
-    services.persoane = PersoaneService();
-    services.catei = CateiService();
+    services.produse = ProduseService();
+
+    get_data();
 };
 
 function get_data(){
 
-    services.persoane.get(function(data){
-        console.table(data);
+    document.getElementById('produse').innerHTML = "";
+
+    services.produse.get(function(data){
+        // console.table(data);
         for(var i=0; i<data.length; i++){
-            createPersoanaElement(data[i]);
+            createProdusElement(data[i]);
         }
     });
 
@@ -36,63 +36,115 @@ function get_data(){
 function post_data(){
     var mydata = {};
     mydata.nume = document.getElementById('input-nume').value;
-    mydata.prenume = document.getElementById('input-prenume').value;
+    mydata.cantitate = document.getElementById('input-cantitate').value;
+    mydata.um = document.getElementById('input-um').value;
+    mydata.pret_unitar = document.getElementById('input-pret').value;
+    mydata.image = document.getElementById('input-image').value ? document.getElementById('input-image').value : "https://www.hsjaa.com/images/joomlart/demo/default.jpg";
 
-    services.persoane.post(mydata, function(response){
-        createPersoanaElement(response);
+    services.produse.post(mydata, function(response){
+        createProdusElement(response);
+
+        document.getElementById('input-nume').value = "";
+        document.getElementById('input-cantitate').value = "";
+        // document.getElementById('input-um').value = "";
+        document.getElementById('input-pret').value = "";
+        document.getElementById('input-image').value = "";
     });
 
 }
-function put_data(){
-    var mydata = {
-        id: 4,
-        nume: "Cordescu",
-        prenume: "Octavian"
-    };
-
-    services.persoane.put(2, mydata, function(){});
-}
-function delete_data(){
-    services.persoane.delete(1, function(){});
-}
 
 
 
-function createPersoanaElement(data){
+
+function createProdusElement(data){
 
     var outer_div = document.createElement("div");
-    outer_div.setAttribute("class", "persoana");
-    document.body.appendChild(outer_div);
+    outer_div.setAttribute("class", "produs-container");
+    document.getElementById('produse').appendChild(outer_div);
 
 
+    // create image
+    var div1 = document.createElement("div");
+    div1.setAttribute('class', 'image');
+    outer_div.appendChild(div1);
+    var img = document.createElement("img");
+    img.setAttribute("src", data.image);
+    div1.appendChild(img);
 
-    var prenume_span = document.createElement("span");
-    prenume_span.innerHTML = data.prenume;
-    outer_div.appendChild(prenume_span);
-    prenume_span.addEventListener("click", function () {
-       var prenume_input = document.createElement("input");
-       prenume_input.value = prenume_span.innerText;
 
-       outer_div.appendChild(prenume_input);
-       outer_div.removeChild(prenume_span);
+    // create name
+    var div2 = document.createElement("div");
+    div2.setAttribute('class', 'name');
+
+    var span2 = document.createElement('span');
+    span2.innerHTML = "<strong>"+data.nume+"</strong>";
+    div2.appendChild(span2);
+
+    outer_div.appendChild(div2);
+    span2.addEventListener('click', function(){
+       var input2 = document.createElement("input");
+       input2.setAttribute('value', data.nume);
+       div2.innerHTML = "";
+       div2.appendChild(input2);
+
+
+        if( !('update' in outer_div.lastChild.classList)){
+            var update_btn = document.createElement("button");
+            update_btn.setAttribute('class', 'update');
+            update_btn.innerHTML = "✓";
+            update_btn.addEventListener("click", function(){
+                var updated_data = data;
+                updated_data.nume = input2.value;
+
+                services.produse.put(data.id, updated_data, function(response){
+                    div1.firstElementChild.setAttribute('src', response.image);
+
+                    span2.innerHTML = "<strong>"+response.nume+"</strong>";
+                    div2.removeChild(input2);
+                    div2.appendChild(span2);
+
+                    div3.innerHTML = response.cantitate + "<span>"+response.um+"</span>";
+                    div4.innerHTML = response.pret_unitar + "RON / "+response.um;
+
+                    outer_div.removeChild(update_btn);
+                });
+            });
+            outer_div.appendChild(update_btn);
+        }
+
     });
 
 
+    // create quatity
+    var div3 = document.createElement("div");
+    div3.setAttribute('class', 'cantitate');
+    // div3.innerHTML = data.cantitate + "<span> "+data.um+"</span>";
+    var span3_1 = document.createElement('span');
+    span3_1.innerHTML = data.cantitate;
+    div3.appendChild(span3_1);
+
+    var span3_2 = document.createElement('span');
+    span3_2.innerHTML = data.um;
+    div3.appendChild(span3_2);
+
+    outer_div.appendChild(div3);
 
 
-    var nume_span = document.createElement("span");
-    nume_span.innerHTML = "<strong> "+data.nume+"</strong>";
-    outer_div.appendChild(nume_span);
+    // create price
+    var div4 = document.createElement("div");
+    div4.setAttribute('class', 'pret');
+    div4.innerHTML = data.pret_unitar + "RON / "+data.um;
+    outer_div.appendChild(div4);
 
 
-
-
-    var buton = document.createElement("button");
-    buton.innerHTML = "x";
-    buton.addEventListener("click", function(){
-        services.persoane.delete(data.id, function(){});
-        document.body.removeChild(outer_div);
+    // remove button
+    var rem_btn = document.createElement("button");
+    rem_btn.setAttribute('class', 'remove');
+    rem_btn.innerHTML = "x";
+    rem_btn.addEventListener("click", function(){
+        services.produse.delete(data.id, function(){});
+        document.getElementById('produse').removeChild(outer_div);
     });
-    outer_div.appendChild(buton);
+    outer_div.appendChild(rem_btn);
 
 }

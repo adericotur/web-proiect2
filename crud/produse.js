@@ -1,5 +1,5 @@
-function PersoaneService(){
-    var endpoint = 'http://localhost:3000/persoane';
+function ProduseService(){
+    var endpoint = 'http://localhost:3000/produse';
 
     var res = {
         get: getObj,
